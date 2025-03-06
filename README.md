@@ -70,7 +70,7 @@ protocol AnyViewBoxProtocol {
 }
 
 struct AnyViewBox<Content> {
-  var body: Content
+  var content: Content
 }
 
 extension AnyViewBox: AnyViewBoxProtocol where Content: View {
