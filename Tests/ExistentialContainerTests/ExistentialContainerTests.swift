@@ -28,8 +28,7 @@ struct ExistentialContainerTests {
 	func testSwiftUIAnyViewSE0335() async throws {
 		let text = Text("")
 		let anyText: Any = text
-		let anyView: AnyView? = (anyText as? (any View))?.__eraseToAnyViewSE0335()
-		#expect(anyView != nil)
+		#expect(AnyView(anySE0335: anyText) != nil)
 	}
 	#endif
 
