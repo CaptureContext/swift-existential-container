@@ -15,3 +15,23 @@ extension ExistentialBox<(any UIComponent)> {
 		ExistentialBox<UIComponentConforming>.open(content) { $0.setAnyModel(model) }
 	}
 }
+
+// MARK: - SE-0352
+
+func setAnyModelSE0352<
+	Component: UIComponent,
+	Model: UIComponentModel
+>(
+	_ model: Model,
+	to component: Component
+) {
+	(model as? Component.Model).map(component.setModel)
+}
+
+// MARK: - SE-0335
+
+extension UIComponent {
+	func setAnyModelSE0335(_ model: any UIComponentModel) {
+		(model as? Model).map(setModel)
+	}
+}

@@ -1,8 +1,9 @@
 # swift-existential-container
 
-[![CI](https://github.com/CaptureContext/swift-existential-container/actions/workflows/ci.yml/badge.svg)](https://github.com/CaptureContext/swift-existential-container/actions/workflows/ci.yml) [![SwiftPM 5.6](https://img.shields.io/badge/swiftpm-6.0-ED523F.svg?style=flat)](https://swift.org/download/) ![Platforms](https://img.shields.io/badge/platforms-all-ED523F.svg?style=flat) [![@capture_context](https://img.shields.io/badge/contact-@capture__context-1DA1F2.svg?style=flat&logo=twitter)](https://twitter.com/capture_context) 
+[![CI](https://github.com/CaptureContext/swift-existential-container/actions/workflows/ci.yml/badge.svg)](https://github.com/CaptureContext/swift-existential-container/actions/workflows/ci.yml) [![SwiftPM 6.0](https://img.shields.io/badge/swiftpm-6.0-ED523F.svg?style=flat)](https://swift.org/download/) ![Platforms](https://img.shields.io/badge/platforms-all-ED523F.svg?style=flat) [![@capture_context](https://img.shields.io/badge/contact-@capture__context-1DA1F2.svg?style=flat&logo=twitter)](https://twitter.com/capture_context) 
 
-Package for opening existentials with ease.
+> [!NOTE]
+> _You don't need this package or explicit `_openExistential` now, because [SE-0352](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0352-implicit-open-existentials.md) introduced implicit open existentials and any of examples can be acheived with plain generic functions that now can open existentials implicitly. Example with AnyView can be simplified even more with [SE-0335](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0335-existential-any.md)_ 💁‍♂️
 
 ## Usage
 
@@ -89,6 +90,38 @@ extension AnyView {
 }
 ```
 
+### [SE-0352](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0352-implicit-open-existentials.md)
+
+```swift
+extension AnyView {
+  @MainActor
+  init?(any: Any) {
+    func open<T: View>(_ view: T) -> AnyView { .init(view) }
+    guard let anyView = any as? (any View) else { return nil }
+    self = open(anyView)
+  }
+}
+```
+
+### [SE-0335](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0335-existential-any.md)
+
+```swift
+extension View {
+  fileprivate func eraseToAnyView() -> AnyView { AnyView(self) }
+}
+```
+
+It's enough, but the call site will look like this `(anyValue as? (any View))?.eraseToAnyView()` which is not very ergonomic and you may still want an AnyView extension
+
+```swift
+extension AnyView {
+  @MainActor
+  init?(any: Any) {
+    guard let anyView = any as? (any View) else { return nil }
+    self = anyView.eraseToAnyView()
+  }
+}
+```
 
 ### APIs
 
@@ -132,7 +165,7 @@ If you use SwiftPM for your project structure, add ExistentialContainer to your 
 ```swift
 .package(
   url: "git@github.com:capturecontext/swift-existential-container.git", 
-  .upToNextMinor(from: "1.0.0")
+  .upToNextMajor(from: "1.0.1")
 )
 ```
 
@@ -141,7 +174,7 @@ or via HTTPS
 ```swift
 .package(
   url: "https://github.com:capturecontext/swift-existential-container.git", 
-  .upToNextMinor("1.0.0")
+  .upToNextMajor("1.0.1")
 )
 ```
 

@@ -18,4 +18,29 @@ extension AnyView {
 	}
 }
 
+// MARK: - SE-0352
+
+extension AnyView {
+	@MainActor
+	init?(anySE0352 any: Any) {
+		func open<T: View>(_ view: T) -> AnyView { .init(view) }
+		guard let anyView = any as? (any View) else { return nil }
+		self = open(anyView)
+	}
+}
+
+// MARK: - SE-0335
+
+extension AnyView {
+	@MainActor
+	init?(anySE0335 any: Any) {
+		guard let anyView = any as? (any View) else { return nil }
+		self = anyView.__eraseToAnyViewSE0335()
+	}
+}
+
+private extension View {
+	func __eraseToAnyViewSE0335() -> AnyView { .init(self) }
+}
+
 #endif
