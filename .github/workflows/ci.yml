@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Debug ${{ matrix.platform }}
-        uses: capturecontext/swift-package-action@prerelease-2.0
+        uses: capturecontext/swift-package-action@2.0
         with:
           workspace: Package.xcworkspace
           cache-derived-data: true
@@ -37,7 +37,7 @@ jobs:
           platform: ${{ matrix.platform }}
       - name: Release ${{ matrix.platform }}
         if: matrix.command != 'test'
-        uses: capturecontext/swift-package-action@prerelease-2.0
+        uses: capturecontext/swift-package-action@2.0
         with:
           workspace: Package.xcworkspace
           cache-derived-data: true
